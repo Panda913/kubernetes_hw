@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+        app: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: yuliia1999/app-js:latest
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9000
+            initialDelaySeconds: 3
+        - name: nginx
+          image: nginx:latest
+          ports:
+          - containerPort: 8080
+          volumeMounts:
+          - name: nginx-configs
+            mountPath: /etc/nginx/conf.d
+      volumes:
+      - name: nginx-configs
+        configMap:
+          name: nginx-config 
+        
+      
+         
+     
+        
